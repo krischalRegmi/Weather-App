@@ -8,6 +8,8 @@ body{
 }
 .weatherForm{
     margin:20px;
+    display:flex;
+    justify-content:center;
 }
 .cityInput{
     padding: 10px;
