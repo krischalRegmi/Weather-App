@@ -104,7 +104,6 @@ function displayError(message){
 }
 
 
-true
 
 
 
