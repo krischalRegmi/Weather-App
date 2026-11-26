@@ -1,23 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#eaf4fb" />
     <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./icons/weather.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="appHeader">
+      <h1 class="appTitle">Weather</h1>
+      <div class="appActions">
+        <details class="settingsMenu">
+          <summary class="settingsMenuToggle">
+            <img src="./icons/hamburger.svg" alt="" aria-hidden="true">
+            <span class="visuallyHidden">Settings</span>
+          </summary>
+          <div class="settingsMenuPanel">
+            <button
+              type="button"
+              class="themeToggle"
+              aria-label="Switch to dark mode"
+            >
+              <img src="./icons/dark-mode.svg" alt="" aria-hidden="true">
+            </button>
+            <button
+              type="button"
+              class="unitToggle"
+              aria-label="Switch temperature to Fahrenheit"
+            >
+              °F
+            </button>
+          </div>
+        </details>
+        <button type="button" class="installButton" hidden>Install app</button>
+      </div>
+    </header>
     <form class="weatherForm">
-        <input type="text" class="cityInput" placeholder="Enter City">
-        <button type="submit">Get Weather</button>
+      <label for="cityInput">Enter City:</label>
+      <input
+        type="text"
+        class="cityInput"
+        id="cityInput"
+        placeholder="e.g. Kathmandu"
+      />
+      <button type="submit">Get Weather</button>
     </form>
-    <div class="card" style="display:none;">
-       
-    </div>
+    <p class="searchStatus" role="status" aria-live="polite"></p>
+    <div
+      class="card"
+      style="display: none"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
-
-
-
-

@@ -1,79 +1,524 @@
+*{
+    box-sizing: border-box;
+}
+
+:root{
+    color-scheme: light;
+    --bg: hsl(205, 45%, 97%);
+    --weather-background: linear-gradient(145deg, hsl(205, 45%, 97%), hsl(195, 40%, 94%));
+    --card-bg: linear-gradient(145deg, hsl(204, 82%, 85%), hsl(37, 70%, 83%));
+    --primary: hsl(151, 60%, 27%);
+    --primary-hover: hsl(151, 60%, 22%);
+    --primary-disabled: hsl(151, 15%, 42%);
+    --primary-text: hsl(0, 0%, 100%);
+    --text: hsl(215, 40%, 22%);
+    --text-strong: hsl(215, 45%, 20%);
+    --text-muted: hsl(215, 30%, 35%);
+    --text-placeholder: hsl(215, 15%, 38%);
+    --surface: hsl(0, 0%, 100%);
+    --surface-hover: hsl(210, 30%, 93%);
+    --surface-translucent: hsla(0, 0%, 100%, 0.62);
+    --border: hsl(215, 15%, 50%);
+    --border-subtle: hsla(215, 35%, 35%, 0.18);
+    --border-width: 0.0625rem;
+    --danger: hsl(0, 55%, 38%);
+    --danger-bg: hsl(0, 70%, 97%);
+    --focus-ring: var(--primary);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.625rem;
+    --radius-card: 1.125rem;
+    --space-1: 0.375rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 2.75rem;
+    --space-8: 3.25rem;
+    --shadow-button: 0 0.25rem 0.625rem hsla(151, 60%, 18%, 0.25);
+    --shadow-button-hover: 0 0.375rem 0.875rem hsla(151, 60%, 18%, 0.32);
+    --shadow-card: 0 0.75rem 1.875rem hsla(215, 30%, 25%, 0.12);
+    --shadow-card-hover: 0 1rem 2.25rem hsla(215, 30%, 25%, 0.16);
+    --radius-control: var(--radius-md);
+    --radius-surface: var(--radius-lg);
+}
+
+:root[data-theme="dark"]{
+    color-scheme: dark;
+    --bg: hsl(0, 0%, 0%);
+    --weather-background: linear-gradient(145deg, hsl(0, 0%, 0%), hsl(0, 0%, 0%));
+    --card-bg: linear-gradient(145deg, hsl(0, 0%, 22%), hsl(0, 0%, 4%));
+    --primary: hsl(155, 55%, 38%);
+    --primary-hover: hsl(155, 55%, 32%);
+    --primary-disabled: hsl(155, 15%, 32%);
+    --primary-text: hsl(0, 0%, 100%);
+    --text: hsl(210, 25%, 90%);
+    --text-strong: hsl(210, 30%, 96%);
+    --text-muted: hsl(210, 20%, 78%);
+    --text-placeholder: hsl(210, 15%, 68%);
+    --surface: hsl(0, 0%, 7%);
+    --surface-hover: hsl(0, 0%, 16%);
+    --surface-translucent: hsla(215, 30%, 10%, 0.42);
+    --border: hsl(215, 15%, 52%);
+    --border-subtle: hsla(210, 35%, 80%, 0.2);
+    --danger: hsl(0, 80%, 82%);
+    --danger-bg: hsl(0, 35%, 20%);
+    --focus-ring: hsl(155, 65%, 68%);
+    --shadow-button: 0 0.25rem 0.625rem hsla(0, 0%, 0%, 0.3);
+    --shadow-button-hover: 0 0.375rem 0.875rem hsla(0, 0%, 0%, 0.4);
+    --shadow-card: 0 0.75rem 1.875rem hsla(0, 0%, 0%, 0.3);
+    --shadow-card-hover: 0 1rem 2.25rem hsla(0, 0%, 0%, 0.42);
+}
+
 body{
     font-family: Arial, sans-serif;
-    background-color: hsl(0, 0%, 95%);
+    color: var(--text);
+    background: var(--weather-background, var(--bg));
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
+    transition: background 500ms ease, color 250ms ease;
+}
+.appHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    width: min(60rem, calc(100vw - 2rem));
+    margin-top: var(--space-5);
+}
+.appTitle{
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+}
+.appActions{
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+.settingsMenu{
+    position: relative;
+}
+.settingsMenuToggle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-strong);
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-subtle);
+    border-radius: var(--radius-control);
+    font-weight: bold;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+.settingsMenuToggle::-webkit-details-marker{
+    display: none;
+}
+.settingsMenuToggle img{
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: brightness(0);
+}
+.visuallyHidden{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.settingsMenuToggle:hover{
+    background-color: var(--surface-hover);
+}
+.settingsMenuToggle:focus-visible{
+    outline: 0.1875rem solid var(--focus-ring);
+    outline-offset: var(--space-1);
+}
+.settingsMenuPanel{
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    z-index: 2;
+    display: grid;
+    gap: var(--space-2);
+    width: fit-content;
+    padding: var(--space-3);
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-subtle);
+    border-radius: var(--radius-surface);
+    box-shadow: var(--shadow-card);
+}
+.themeToggle,
+.installButton{
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-strong);
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-subtle);
+    border-radius: var(--radius-control);
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.themeToggle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-height: 2.75rem;
+    border: 0.125rem solid var(--text-muted);
+}
+.themeToggle img{
+    display: block;
+    width: auto;
+    height: 1.5rem;
+    filter: brightness(0);
+}
+:root[data-theme="dark"] .settingsMenuToggle img,
+:root[data-theme="dark"] .themeToggle img{
+    filter: brightness(0) invert(1);
+}
+.themeToggle:hover,
+.installButton:hover{
+    background-color: var(--surface-hover);
+    transform: translateY(-0.0625rem);
+}
+.themeToggle:focus-visible,
+.installButton:focus-visible{
+    outline: 0.1875rem solid var(--focus-ring);
+    outline-offset: var(--space-1);
+}
+.installButton[hidden]{
+    display: none;
 }
 .weatherForm{
-    margin:20px;
+    margin: var(--space-6) var(--space-5) var(--space-5);
     display:flex;
     justify-content:center;
     align-items:center;
 }
-.cityInput{
-    padding: 10px;
+label[for="cityInput"]{
+    color: var(--text);
     font-weight: bold;
-    border: 2px solid hsla(0, 0%, 20%, 0.3);
-    border-radius: 10px;
-    margin: 10px;
-    width: 300px;
+    font-size: clamp(1rem, 5vw, 2rem);
+    margin: var(--space-2) 0 var(--space-2) var(--space-2);
+}
+.cityInput{
+    padding: var(--space-2);
+    font-weight: bold;
+    color: var(--text-strong);
+    background-color: var(--surface);
+    border: 0.125rem solid var(--border);
+    border-radius: var(--radius-control);
+    margin: var(--space-2);
+    width: 18.75rem;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.cityInput:focus-visible{
+    border-color: var(--focus-ring);
+    outline: 0.1875rem solid var(--focus-ring);
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.3125rem var(--surface);
+}
+.cityInput::placeholder{
+    color: var(--text-placeholder);
+    opacity: 1;
 }
 button[type="submit"]{
-    padding:10px 20px;
+    padding: var(--space-2) var(--space-5);
     font-weight: bold;
-    font-size: 2rem;
-    background-color: hsl(122, 39%, 50%);
-    color: white;
+    font-size: clamp(1.1rem, 5vw, 2rem);
+    background-color: var(--primary);
+    color: var(--primary-text);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--radius-control);
     cursor: pointer;
+    box-shadow: var(--shadow-button);
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 button[type="submit"]:hover{
-    background-color: hsl(122, 39%, 40%)
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-0.125rem);
+}
+button[type="submit"]:focus-visible{
+    outline: 0.1875rem solid var(--focus-ring);
+    outline-offset: var(--space-1);
+    box-shadow: 0 0 0 0.3125rem var(--surface);
+}
+button[type="submit"]:active{
+    transform: translateY(0);
+}
+button[type="submit"]:disabled{
+    background-color: var(--primary-disabled);
+    box-shadow: none;
+    cursor: wait;
+    transform: none;
+}
+.searchStatus{
+    min-height: 1.5em;
+    margin: 0 var(--space-5) var(--space-4);
+    color: var(--text);
+    font-weight: bold;
+    text-align: center;
+}
+.loadingDisplay{
+    color: var(--text);
+    font-weight: bold;
 }
 .card{
-    background: linear-gradient(180deg, hsl(210, 100%, 75%), hsl(40, 100%, 75%));
-    padding: 50px;
-    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
-    min-width: 300px;
+    background: var(--card-bg);
+    padding: var(--space-7) var(--space-8);
+    border: var(--border-width) solid var(--border-subtle);
+    box-shadow: var(--shadow-card);
+    min-width: 18.75rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 10px;
+    border-radius: var(--radius-card);
+    width: min(47.5rem, calc(100vw - 2rem));
+    transition: box-shadow 220ms ease, transform 220ms ease;
+}
+.card:hover{
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-0.125rem);
 }
 h1{
     margin-top: 0;
-    margin-bottom: 25px;
+    margin-bottom: var(--space-3);
 }
 p{
-    font-size: 1.5rem;
-    margin: 5px 0px;
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    margin: var(--space-2) 0;
 }
-.cityDisplay, .tempDisplay{
-    font-size: 3.5rem;
+.cityDisplay{
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
     font-weight: bold;
-    color:hsla(0, 0%, 0%, 0.75);
-    margin-bottom: 25px;
+    color: var(--text);
+    margin-bottom: var(--space-2);
 }
-.humidityDisplay{
+.tempDisplay{
+    font-size: clamp(2.75rem, 12vw, 4rem);
     font-weight: bold;
-    margin-bottom: 25px;
+    line-height: 1.1;
+    color: var(--text-strong);
+    margin: 0 0 var(--space-5);
 }
 .descDisplay{
-    font-style: italic;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 6vw, 2rem);
+    color: var(--text-muted);
+    text-transform: capitalize;
 }
 .weatherEmoji{
-    margin:0;
-    font-size: 7.5rem;
+    margin: 0;
+    font-size: clamp(4rem, 22vw, 7.5rem);
+    line-height: 1.2;
+}
+.weatherDetails{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.75rem, 1fr));
+    gap: var(--space-2);
+    width: 100%;
+    margin-top: var(--space-4);
+}
+.weatherDetail{
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text);
+    background-color: var(--surface-translucent);
+    border: var(--border-width) solid var(--border-subtle);
+    border-radius: var(--radius-control);
+    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+    font-weight: bold;
+    text-align: center;
+}
+.unitToggle{
+    padding: var(--space-2) var(--space-4);
+    text-align: left;
+    width: 100%;
+    color: var(--text-strong);
+    background: var(--surface);
+    border: 0.125rem solid var(--text-muted);
+    border-radius: var(--radius-control);
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+.unitToggle:hover{
+    background-color: var(--surface-hover);
+}
+.unitToggle:focus-visible{
+    outline: 0.1875rem solid var(--text-strong);
+    outline-offset: var(--space-1);
+    box-shadow: 0 0 0 0.3125rem var(--surface);
+}
+.forecastSection{
+    width: 100%;
+    margin-top: var(--space-6);
+}
+.forecastSection h2{
+    margin: 0 0 var(--space-3);
+    color: var(--text);
+    font-size: clamp(1.35rem, 5vw, 1.75rem);
+    text-align: left;
+}
+.forecastGrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6.25rem, 1fr));
+    gap: var(--space-2);
+}
+.forecastDay{
+    min-width: 0;
+    padding: var(--space-3) var(--space-2);
+    color: var(--text);
+    background-color: var(--surface-translucent);
+    border: var(--border-width) solid var(--border-subtle);
+    border-radius: var(--radius-surface);
+    text-align: center;
+}
+.forecastDay h3{
+    margin: 0;
+    font-size: 1rem;
+}
+.forecastEmoji{
+    margin: var(--space-1) 0;
+    font-size: 2rem;
+}
+.forecastTemperature{
+    margin: var(--space-1) 0;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+.forecastDescription{
+    margin: var(--space-1) 0 0;
+    font-size: 0.85rem;
+    text-transform: capitalize;
 }
 .errorDisplay {
-    font-size: 2.5rem;
+    font-size: clamp(1.5rem, 7vw, 2.5rem);
     font-weight: bold;
-    color: hsla(0, 0%, 0%, 0.75); 
+    color: var(--danger);
+    background-color: var(--danger-bg);
+    border-left: 0.3125rem solid var(--danger);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+}
+.retryButton{
+    padding: var(--space-2) var(--space-5);
+    color: var(--text-strong);
+    background: var(--surface);
+    border: 0.125rem solid var(--text-muted);
+    border-radius: var(--radius-control);
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+.retryButton:hover{
+    background-color: var(--surface-hover);
+}
+.retryButton:focus-visible{
+    outline: 0.1875rem solid var(--text-strong);
+    outline-offset: var(--space-1);
+    box-shadow: 0 0 0 0.3125rem var(--surface);
 }
 
+@media (max-width: 37.5rem){
+    .appHeader{
+        width: calc(100vw - 2rem);
+    }
 
+    .appActions{
+        gap: var(--space-1);
+    }
+
+    .themeToggle,
+    .installButton{
+        padding: var(--space-2);
+        font-size: 0.9rem;
+    }
+
+    .weatherForm{
+        flex-direction: column;
+        align-items: stretch;
+        width: calc(100% - 2rem);
+        margin: var(--space-4);
+    }
+
+    label[for="cityInput"]{
+        margin: 0 0 var(--space-1);
+    }
+
+    .cityInput{
+        width: 100%;
+        margin: 0 0 var(--space-3);
+    }
+
+    button[type="submit"]{
+        width: 100%;
+    }
+
+    .card{
+        width: calc(100% - 2rem);
+        min-width: 0;
+        padding: clamp(var(--space-5), 8vw, var(--space-7));
+    }
+}
+
+body[data-weather="clear"]{
+    --weather-background: linear-gradient(145deg, hsl(42, 90%, 93%), hsl(200, 80%, 94%));
+}
+body[data-weather="clouds"]{
+    --weather-background: linear-gradient(145deg, hsl(210, 30%, 91%), hsl(220, 35%, 94%));
+}
+body[data-weather="rain"],
+body[data-weather="storm"]{
+    --weather-background: linear-gradient(145deg, hsl(215, 35%, 88%), hsl(225, 40%, 92%));
+}
+body[data-weather="snow"]{
+    --weather-background: linear-gradient(145deg, hsl(195, 55%, 93%), hsl(215, 45%, 96%));
+}
+body[data-weather="mist"]{
+    --weather-background: linear-gradient(145deg, hsl(205, 20%, 91%), hsl(195, 25%, 94%));
+}
+:root[data-theme="dark"] body[data-weather="clear"]{
+    --weather-background: linear-gradient(145deg, hsl(32, 45%, 14%), hsl(215, 35%, 15%));
+}
+:root[data-theme="dark"] body[data-weather="clouds"]{
+    --weather-background: linear-gradient(145deg, hsl(215, 24%, 13%), hsl(220, 28%, 18%));
+}
+:root[data-theme="dark"] body[data-weather="rain"],
+:root[data-theme="dark"] body[data-weather="storm"]{
+    --weather-background: linear-gradient(145deg, hsl(218, 38%, 11%), hsl(224, 35%, 18%));
+}
+:root[data-theme="dark"] body[data-weather="snow"]{
+    --weather-background: linear-gradient(145deg, hsl(210, 35%, 17%), hsl(220, 32%, 22%));
+}
+:root[data-theme="dark"] body[data-weather="mist"]{
+    --weather-background: linear-gradient(145deg, hsl(210, 20%, 16%), hsl(205, 24%, 22%));
+}
+
+@media (prefers-reduced-motion: reduce){
+    *,
+    *::before,
+    *::after{
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
